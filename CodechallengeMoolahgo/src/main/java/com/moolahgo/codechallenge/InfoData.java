@@ -8,6 +8,7 @@ public class InfoData {
 
 	private String owner;
 	private String referralcode;
+	
 	@Override
 	public String toString() {
 		return "InfoData [owner=" + owner + ", referralcode=" + referralcode + "]";

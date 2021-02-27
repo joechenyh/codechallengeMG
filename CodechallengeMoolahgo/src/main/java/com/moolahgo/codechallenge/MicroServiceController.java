@@ -1,18 +1,31 @@
 package com.moolahgo.codechallenge;
 
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 //EndPoint
 //to find the owner of the referralcode and return the detail of the owner
@@ -22,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @CrossOrigin
-public class MicroService {
+public class MicroServiceController {
 	
 	/*
 
@@ -54,24 +67,35 @@ Rest API is more than just using JSON.
 
 	 */
 	
+	
+	
 
-	@RequestMapping(value="/process", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
-	public String GetReferralCodeOwner(String input) throws JsonMappingException, JsonProcessingException { // receives a JSON object 
+	@PostMapping(value="/process", consumes = "application/json", produces = "application/json")
+	public String GetReferralCodeOwner(@RequestBody String input) throws JsonProcessingException { // receives a JSON object 
 		
-		String infodataAsString = "{\"rcode\":\"joereferralcode\"}";
+	
+		ObjectMapper objectmapper = new ObjectMapper();
 		
+		InputObject inputobject = objectmapper.readValue(input, InputObject.class);
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonInput jinput = objectMapper.readValue(infodataAsString, JsonInput.class);	//hardcode first 
-		
-		if(jinput.getRcode()=="joereferralcode") {
+		if(inputobject.getRcode().equals("joereferralcode")) {
+			
+			System.out.println("condition is true");
 		
 		InfoData d1 = new InfoData("joe", "joereferralcode");
-		infodataAsString = objectMapper.writeValueAsString(d1);
+		
+		System.out.println(d1); 
+		
+		String s = objectmapper.writeValueAsString(d1);
+
+		return s;
 		
 		}
 		
-		return infodataAsString;
+
+		else 
+		
+		return null;
 		
 	}
 	
